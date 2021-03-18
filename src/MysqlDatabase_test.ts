@@ -1,9 +1,20 @@
-import { Entity, newTrace, Scene } from '@rotcare/io';
+import { newTrace, Scene } from '@rotcare/io';
 import * as mysql from 'mysql2/promise';
 import { MysqlDatabase } from './MysqlDatabase';
 import { strict } from 'assert';
+import { Product } from './test/Product';
+import { codegen, Model } from '@rotcare/codegen';
 
-const pool = mysql.createPool(require('./testConn'));
+const pool = mysql.createPool({
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "database": "test"
+});
+
+// export const abc = codegen((model: Model<Product>) => {
+//     return '"hello"';
+// })
 
 describe('MysqlDatabase', () => {
     let scene: Scene;
@@ -19,25 +30,10 @@ describe('MysqlDatabase', () => {
             name varchar(255),
             price int)`, {});
     })
+    after(async() => {
+        await pool.end()
+    })
     it('增删改查', async () => {
-        class Product extends Entity {
-            id: string;
-            name: string;
-            price: number = 0;
-            public static async createProduct(scene: Scene, props: Partial<Product>) {
-                return await scene.io.database.insert(scene, Product, props);
-            }
-            public static async queryProduct(scene: Scene, props: Partial<Product>) {
-                return await scene.io.database.query(scene, Product, props);
-            }
-            public async updatePrice(scene: Scene, newPrice: number) {
-                this.price = newPrice;
-                await scene.io.database.update(scene, this.table, this);
-            }
-            public async deleteMe(scene: Scene) {
-                await scene.io.database.delete(scene, this.table, this);
-            }
-        }
         await scene.execute(undefined, async() => {
             const apple = await scene.create(Product, { name: 'apple' });
             strict.ok(apple.id);
