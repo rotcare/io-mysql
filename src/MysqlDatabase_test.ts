@@ -3,19 +3,22 @@ import * as mysql from 'mysql2/promise';
 import { MysqlDatabase } from './MysqlDatabase';
 import { strict } from 'assert';
 
+const pool = mysql.createPool(require('./testConn'));
+
 describe('MysqlDatabase', () => {
-    let conn: mysql.Connection;
+    let scene: Scene;
     beforeEach(async () => {
-        conn = await mysql.createConnection(require('./testConn'));
-        await conn.execute('DROP TABLE IF EXISTS Product')
-        await conn.execute(`CREATE TABLE Product (
+        const database = new MysqlDatabase(pool);
+        scene = new Scene(newTrace('test'), {
+            database,
+            serviceProtocol: undefined as any
+        });        
+        await scene.io.database.executeSql(scene, 'DROP TABLE IF EXISTS Product', {})
+        await scene.io.database.executeSql(scene, `CREATE TABLE Product (
             id varchar(255) PRIMARY KEY,
             name varchar(255),
-            price int)`)
+            price int)`, {});
     })
-    afterEach(async () => {
-        await conn.end();
-    });
     it('增删改查', async () => {
         class Product extends Entity {
             id: string;
@@ -35,11 +38,6 @@ describe('MysqlDatabase', () => {
                 await scene.io.database.delete(scene, this.table, this);
             }
         }
-        const database = new MysqlDatabase(conn);
-        const scene = new Scene(newTrace('test'), {
-            database,
-            serviceProtocol: undefined as any
-        });
         await scene.execute(undefined, async() => {
             const apple = await scene.create(Product, { name: 'apple' });
             strict.ok(apple.id);
