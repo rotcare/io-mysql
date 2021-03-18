@@ -5,7 +5,8 @@ describe('MysqlDatabase', () => {
         var connection = await mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: '123456',
+            password: '',
+            database: 'test'
         });
 
         await connection.connect();
