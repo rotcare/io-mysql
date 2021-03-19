@@ -1,9 +1,16 @@
 import { Entity, Scene } from "@rotcare/io";
+import { mysql } from "../mysql";
 
+@mysql
 export class Product extends Entity {
-    id: string;
-    name: string;
-    price: number = 0;
+    
+    @mysql.column('varchar(255)')
+    public id: string;
+    @mysql.column('varchar(255)')
+    public name: string;
+    @mysql.column('int')
+    public price: number = 0;
+
     public static async createProduct(scene: Scene, props: Partial<Product>) {
         return await scene.io.database.insert(scene, Product, props);
     }

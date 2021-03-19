@@ -2,8 +2,9 @@ import { newTrace, Scene } from '@rotcare/io';
 import * as mysql from 'mysql2/promise';
 import { MysqlDatabase } from './MysqlDatabase';
 import { strict } from 'assert';
-import { Product } from './test/Product';
+import { Product } from './testModels/Product';
 import { codegen, Model } from '@rotcare/codegen';
+import { generateCreateTable } from '@rotcare/io-mysql';
 
 const pool = mysql.createPool({
     "host": "localhost",
@@ -12,9 +13,9 @@ const pool = mysql.createPool({
     "database": "test"
 });
 
-// export const abc = codegen((model: Model<Product>) => {
-//     return '"hello"';
-// })
+const createProductTableSql = codegen((model: Model<Product>) => {
+    return `return ${JSON.stringify(generateCreateTable(model))}`;
+})
 
 describe('MysqlDatabase', () => {
     let scene: Scene;
@@ -25,10 +26,7 @@ describe('MysqlDatabase', () => {
             serviceProtocol: undefined as any
         });        
         await scene.io.database.executeSql(scene, 'DROP TABLE IF EXISTS Product', {})
-        await scene.io.database.executeSql(scene, `CREATE TABLE Product (
-            id varchar(255) PRIMARY KEY,
-            name varchar(255),
-            price int)`, {});
+        await scene.io.database.executeSql(scene, createProductTableSql, {});
     })
     after(async() => {
         await pool.end()
