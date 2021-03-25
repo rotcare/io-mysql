@@ -20,7 +20,7 @@
         "@rotcare/io": "*"
     },
     "scripts": {
-        "test": "TS_NODE_IGNORE=' ' yarn mocha -r @rotcare/project/register './src/**/*_test.ts'",
-        "ci": "tsc && yarn test"
+        "test": "TS_NODE_IGNORE=' ' yarn mocha -r ts-eager/register './src/**/*_test.ts'",
+        "ci": "tsc --noEmit && yarn test"
     }
 }
