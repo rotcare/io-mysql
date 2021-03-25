@@ -7,7 +7,8 @@
         "module": "CommonJs",
         "strictPropertyInitialization": false,
         "jsx": "react",
-        "noEmit": true
+        "outDir": "lib",
+        "declaration": true
     },
-    "include": ["./**/*.ts"]
+    "include": ["./**/*.ts", "../model-mysql/src/generateCreateTable.ts", "../model-mysql/src/should.ts", "../model-mysql/src/mysql.ts", "../model-mysql/src/MysqlDatabase_test.ts"]
 }

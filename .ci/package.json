@@ -5,14 +5,10 @@
         ".."
     ],
     "dependencies": {
-        "@rotcare/io": "git://github.com/rotcare/io.git",
-        "@rotcare/codegen": "git://github.com/rotcare/codegen.git",
-        "@rotcare/project": "git://github.com/rotcare/project.git"
+        "@rotcare/io": "git://github.com/rotcare/io.git"
     },
     "resolutions": {
-        "@rotcare/io": "git://github.com/rotcare/io.git",
-        "@rotcare/codegen": "git://github.com/rotcare/codegen.git",
-        "@rotcare/project": "git://github.com/rotcare/project.git"
+        "@rotcare/io": "git://github.com/rotcare/io.git"
     },
     "scripts": {
         "postinstall": "cd .. && rm -rf node_modules && ln -s .ci/node_modules"
