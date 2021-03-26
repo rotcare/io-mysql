@@ -10,5 +10,5 @@
         "outDir": "lib",
         "declaration": true
     },
-    "include": ["./**/*.ts", "../model-mysql/src/generateCreateTable.ts", "../model-mysql/src/should.ts", "../model-mysql/src/mysql.ts", "src/MysqlDatabase_test.ts"]
+    "include": ["./**/*.ts"]
 }
