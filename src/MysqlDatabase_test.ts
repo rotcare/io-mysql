@@ -20,23 +20,23 @@ export class Product extends Entity {
     );
 
     public static async createProduct(scene: Scene, props: Partial<Product>) {
-        return await scene.io.database.insert(scene, Product, props);
+        return await scene.useDatabase().insert(Product, props);
     }
     public static async queryProduct(scene: Scene, props: Partial<Product>) {
-        return await scene.io.database.query(scene, Product, props);
+        return await scene.useDatabase().query(Product, props);
     }
     public async updatePrice(scene: Scene, newPrice: number) {
         this.price = newPrice;
-        await scene.io.database.update(scene, this.table, this);
+        await scene.useDatabase().update(this.table, this);
     }
     public async deleteMe(scene: Scene) {
-        await scene.io.database.delete(scene, this.table, this);
+        await scene.useDatabase().delete(this.table, this);
     }
 }
 
 async function recreateProductTable(scene: Scene) {
-    await scene.io.database.executeSql(scene, 'DROP TABLE IF EXISTS Product', {});
-    await scene.io.database.executeSql(scene, `CREATE TABLE Product (
+    await scene.useDatabase().executeSql('DROP TABLE IF EXISTS Product', {});
+    await scene.useDatabase().executeSql(`CREATE TABLE Product (
         id varchar(255) PRIMARY KEY,
         name varchar(255),
         price int)`, {});
